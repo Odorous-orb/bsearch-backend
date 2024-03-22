@@ -1,0 +1,380 @@
+<!DOCTYPE HTML>
+
+<html>
+<head>
+	<title>Business Search</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+	<script src="/js/jquery-2.1.3.min.js"></script>
+	<script src="/js/config.js"></script>
+	<script src="/js/script_gics.js"></script>
+	<script src="/js/script_chat.js"></script>
+	<script src="/js/script_anzic.js"></script>
+	<script src="/js/script.js"></script>
+</head>
+
+<body>
+	<div id="doc">
+		<aside class="box" id="test">
+			<button id="collapse_btn" style="top:22%;">&lt;</button>
+			<div>
+				<h2>Business Search</h2>
+				<input style="width: 380px;" type="text" name="query" id="term" placeholder="ABN, ACN or Business Name for ABR Search" autocomplete=off>
+				<button class="send" onclick="clickInput()" id="search" style="width: 80px; height:40px; border-color: #fff;">Search</button>
+			</div>
+			<div id="company-list" style="left:0px; top:110px; height: 440px; z-index: 1; overflow-x: hidden; overflow-y: scroll;">
+				<ul id="company-ul">
+				</ul>
+			</div>
+			<div id="status" style="margin-top:10px; margin-left: 20px;">
+			Initializing...
+			</div>
+		</aside>
+		<main>
+			<div id="mainPane" style="height:100%; overflow-x: scroll;">
+				<div>
+					<h2>Profile</h2>
+				</div>
+				<div class="tabs">
+					<nav>
+						<a href="javascript:;" id="nav_accziom" data-cont="accziom" class="active">ACCZIOM</a>
+						<a href="javascript:;" id="nav_abn" data-cont="abn">ABN</a>
+						<a href="javascript:;" id="nav_acn" data-cont="acn">ACN</a>
+						<a href="javascript:;" id="nav_bing" data-cont="bing">Bing</a>
+						<a href="javascript:;" id="nav_anzic" data-cont="anzic">ANZIC</a>
+						<a href="javascript:;" id="nav_tpb" data-cont="tpb">TPB</a>
+						<a href="javascript:;" id="nav_tl" data-cont="tl">TrueLocal</a>
+						<a href="javascript:;" id="nav_asx" data-cont="asx">ASX</a>
+						<a href="javascript:;" id="nav_verify" data-cont="verify">Verification</a>
+						<a href="javascript:;" id="nav_lei" data-cont="lei">LEI</a>
+						<a href="javascript:;" id="nav_map" data-cont="map">Map</a>
+					</nav>
+					<div id="section-list" style="margin-top: 10px;">
+						<section class="cont" id="accziom">
+							<div id="accziom_result" class="section-frame" style="height: 460px; overflow-x:hidden; overflow-y:scroll">
+								<div class="section-description">
+									This pane displays the information of a legal entity derived from Australian Legal Entity Knowlege base. 
+									<br>
+									It has two versions: Free and Standard version. In the Free version, only the data from public resources (e.g. ABR) is available. In the Standard version, all the data built up by the Accziom community is available in the display or can be called via our API.  
+								</div>
+								<div>
+									<input type="button" id="conv_version" value="Standard version. Press this button to convert to Free version"></input>
+								</div>
+								<div id="wait_rdf" style="display: none;">
+									Waiting for response from server...
+								</div>
+								<table id="accziom_table" class="table_profile"></table>
+							</div>
+						</section>
+						<section class="cont" id="abn">
+							<div id="wait_abn" style="display: none;">
+								Waiting for response from server...
+							</div>
+							<div id="abn_result" class="section-frame" style="height: 460px; overflow-x:hidden; overflow-y:scroll">
+								<div class="section-description">
+									This pane displays the information of legal entity from Australian Business Register(ABR) public data. It uses ABN lookup api.
+								</div>
+								<table id="abn_table" class="table_profile"></table>
+							</div>
+						</section>
+						<section class="cont" id="acn">
+							<div id="wait_acn" style="display: none;">
+								Waiting for response from server...
+							</div>
+							<div id="acn_result" class="section-frame" style="height: 460px; overflow-x:hidden; overflow-y:scroll">
+								<div class="section-description">
+									This pane displays the information of legal entity from Australian Securities & Investments Commission(ASIC) public data.
+								</div>
+								<table id="acn_table" class="table_profile"></table>
+							</div>
+						</section>
+						<section class="cont" id="bing">
+							<div id="wait_bing" style="display: none;">
+								Waiting for response from server...
+							</div>
+							<div id="bing_result" class="section-frame" style="height: 460px; overflow-x:hidden; overflow-y:scroll">
+								<div class="section-description">
+									This pane displays the information of legal entity from Bing search result. It uses Bing search api.
+								</div>
+								<table id="bing_table" class="table_profile"></table>
+							</div>
+						</section>
+						<section class="cont" id="anzic">
+							<div class="section-frame" style="height: 460px; overflow-x:hidden; overflow-y:scroll">
+								<div class="section-description">
+									This pane displays the ANZIC classification of legal entity. It is classified by using ACCZIOM AI technique according to businesses or description of legal entity.
+									You can insert new keyword and select the correct classification.
+								</div>
+								<div class="chat_box">
+									<div class="input-box">
+										<input class="input" placeholder="Enter your text, please." type="text" id="pl" onkeydown="keyEnter()" />
+										<div class="send" id="submit">Send</div>
+									</div>
+									<div class="view" id="ulView">
+										<ul id="view"></ul>
+									</div>
+								</div>
+								
+								<div id="anzic_result">
+									<table id="anzic_table" class="table_profile"></table>
+								</div>
+								<div id="anzic_details">
+									<table>
+										<tr>
+											<td style="width:60%; margin:10px;">
+												<table>
+													<tr><td class="anzic_label">Division</td><td class="anzic_content"><select title="Division" id="anzic_div" class="anzic_select"></select></td></tr>
+													<tr><td class="anzic_label">SubDivision</td><td class="anzic_content"><select title="SubDivision" id="anzic_subdiv" class="anzic_select"></select></td></tr>
+													<tr><td class="anzic_label">Group</td><td class="anzic_content"><select title="Group" id="anzic_group" class="anzic_select"></select></td></tr>
+													<tr><td class="anzic_label">Class</td><td class="anzic_content"><select title="Class" id="anzic_class" class="anzic_select"></select></td></tr>
+													<tr><td class="anzic_label">Code</td><td class="anzic_content"><div id="anzic_code" class="anzic_select"></div></td></tr>
+												</table>
+											</td>
+											
+										</tr>
+									</table>
+									
+									<br>
+									<div id="anzic_desc" style="width:85%; margin-left:7%"></div>
+								</div>	
+							</div>
+							
+						</section>
+						<section class="cont" id="tpb">
+							<div id="wait_tpb" style="display: none;">
+								Waiting for response from server...
+							</div>
+							<div id="tpb_result" class="section-frame" style="height: 460px; overflow-x:hidden; overflow-y:scroll">
+								<div class="section-description">
+									This pane displays the information of legal entity from Tax Practitioners Board(TPB) databse. 
+									<br>
+									<b>Caution:</b> The search result may be not what you expected, because it is retrieved by legal name.
+								</div>
+								<table id="tpb_table" class="table_profile"></table>
+							</div>
+						</section>
+						<section class="cont" id="tl">
+							<div id="wait_tl" style="display: none;">
+								Waiting for response from server...
+							</div>
+							<div id="tl_result" class="section-frame" style="height: 460px; overflow-x:hidden; overflow-y:scroll">
+								<div class="section-description">
+									This pane displays the information of legal entity from True Local website (https://www.truelocal.com.au/).
+								</div>
+								<table id="tl_table" class="table_profile"></table>
+							</div>
+						</section>
+						<section class="cont" id="asx">
+							<div id="wait_asx" style="display: none;">
+								Waiting for response from server...
+							</div>
+							<div class="section-frame" style="height: 460px; overflow-x:hidden; overflow-y:scroll">
+								<div class="section-description">
+									This pane displays the information of legal entity from Australian Securities Exchange (ASX) website (https://www2.asx.com.au/).
+								</div>
+								<div id="asx_result">
+									<table id="asx_table" class="table_profile"></table>
+								</div>
+								<div id="gics_details">
+									<table>
+										<tr><td class="anzic_label">Sector</td><td class="anzic_content"><select title="Sector" id="gics_div" class="anzic_select"></select></td></tr>
+										<tr><td class="anzic_label"><b>Industry Group</b></td><td class="anzic_content"><select title="Industry Group" id="gics_subdiv" class="anzic_select"></select></td></tr>
+										<tr><td class="anzic_label">Industry</td><td class="anzic_content"><select title="Industry" id="gics_group" class="anzic_select"></select></td></tr>
+										<tr><td class="anzic_label">Sub-Industry</td><td class="anzic_content"><select title="Sub-Industry" id="gics_class" class="anzic_select"></select></td></tr>
+									</table>
+									<br>
+									<div id="gics_desc" style="width:85%; margin-left:7%">
+		
+									</div>
+								</div>	
+							</div>
+						</section>
+						<section class="cont" id="verify">
+							<div class="section-description">
+								This pane displays the information of legal entity from Australian Securities & Investments Commission(ASIC) non-public data. It uses GBG Identity Verification api and needs payments.
+								<br>
+								Currently, this service has been temporarily stopped.
+							</div>
+							<div style="position:absolute; right:70px; margin-top:10px;">
+								<div id="register_mark" class="mark_div"></div>
+								<div id="verification_mark" class="mark_div"></div>
+							</div>
+							<div>
+								<span id="verifyLabel" style="width:80px; margin-left:10px; height:30px;">
+									<select id="verifySelect" style="height: 30px;" onchange="changeVerifyType()">
+										<option value="abn">ABN</option>
+										<option value="acn">ACN</option>
+										<option value="name">Name</option>
+									</select>
+								</span>
+								<input id="verifyInput" style="width:calc(80% - 220px); margin-left:10px; height:30px;">
+								<button id="verifySearch" class="send" onclick="clickVerify()" style="width:90px; height:30px; margin:10px; border-color: white;">Verify</button>
+							</div>
+							<div id="verifyOther" style="margin:10px; display:none;">
+								<span style="height: 30px; margin:10px;">Type</span><input id="verifyType" style="margin-left: 22px; width: 65%; height: 30px; margin-top:10px;">
+								<br>
+								<span style="height: 30px; margin:10px;">SubType</span><input id="verifySubType" style="margin-left: -2px; width: 65%; height: 30px; margin-top:10px;">
+								<br>
+								<span style="height: 30px; margin:10px;">Number</span><input id="verifyNumber" style="margin-left: 2px; width: 65%; height: 30px; margin-top:10px;">
+							</div>
+							<div id="wait_verify" style="display: none;">
+								Waiting for response from server...
+							</div>
+							<div id="verify_result" class="section-frame" style="height: 460px; overflow-x:hidden; overflow-y:scroll">
+								<table id="verify_table" class="table_profile"></table>
+							</div>
+						</section>
+						<section class="cont" id="lei">
+							<div id="wait_lei" style="display: none;">
+								Waiting for response from server...
+							</div>
+							<div id="lei_result" class="section-frame" style="height: 460px; overflow-x:hidden; overflow-y:scroll">
+								<div class="section-description">
+									This pane displays the information of legal entity from Global Legal Entity Indentifier (GLEI) System.								
+								</div>
+								<table id="lei_table" class="table_profile"></table>
+							</div>
+						</section>
+						<section class="cont" id="map">
+							<div class="section-description">
+								This pane displays the location of legal entity by using Wolfram Alpha api. Drawing map may take several seconds.					
+							</div>
+							<div id="wait_map" style="display: none;">
+								Waiting for response from server...
+							</div>
+							
+							<div id="map_result" class="section-frame" style="height: 460px; overflow-x:hidden; overflow-y:scroll">
+							</div>
+						</section>
+					</div>
+				</div>
+			</div>
+			
+		
+		</main>
+	
+	</div>
+	
+	<script>
+		var box = document.getElementById("test");
+		var btn = document.getElementById("collapse_btn");
+		var main = document.getElementById("mainPane");
+		var btn_free = document.getElementById("conv_version");
+		btn_free.onclick = function() {
+			if (btn_free.value.startsWith("Free")) {
+				btn_free.value = "Standard version. Press this button to convert to Free version.";
+			}
+			else {
+				btn_free.value = "Free version. Press this button to convert to Standard version.";
+			}
+			refresh_result();
+		}
+		btn.onclick = function() {
+			if (box.offsetLeft == 0) {
+				box.style['margin-left'] = -500 + "px"
+				main.style['left'] = 0;
+				this.innerText = ">";
+			} else {
+				box.style['margin-left'] = 0 + "px";
+				main.style['left'] = "500px";
+				this.innerText = "<";
+			}
+		}
+		
+		var body = document.getElementsByTagName("body")[0];
+		body.onresize = function() {
+			var max_height = window.innerHeight - 160;
+			var cnt = document.getElementById("company-list");
+			cnt.style.height = max_height + "px";
+			cnt = document.getElementById("section-list");
+			cnt.style.height = (max_height+20) + "px";
+			
+			var cnts = document.getElementsByClassName("section-frame");
+			for (var i=0; i<cnts.length; i++) {
+				var cnt = cnts[i];
+				cnt.style.height = (max_height+20) + "px";
+			}
+			//cnt.style.maxHeight = max_height + "px";
+			
+			//var btn = document.getElementById("collapse_btn");
+			btn.style.top = (max_height +160-75)* 0.5 + "px";
+			
+			
+		}
+		body.onresize();
+
+		var navs = document.querySelectorAll("nav a");
+		//document.querySelector("section").style.display="block";
+		for (var i=0; i<navs.length; i++) {
+			navs[i].onclick=function(){
+				var beforeNav = document.querySelector(".active")
+				var beforeId = beforeNav.dataset["cont"];
+				document.querySelector("#"+beforeId).style.display="none";
+				for (var j=0; j<navs.length; j++) {
+					navs[j].classList.remove("active");
+					navs[j].style['color'] = '#fff';
+				}
+				this.classList.add("active");
+				this.style['color'] = '#e16161';
+				var secId = this.dataset["cont"];
+				setCurTab(secId);
+				document.querySelector("#"+secId).style.display="block";
+				if (secId == "anzic") {
+					$('#pl').focus();
+				}
+			}
+		}
+
+		var term = document.getElementById("term");
+		term.focus();
+
+		term.onkeypress=function(e){
+			var keynum = window.event ? e.keyCode : e.which;
+			if (keynum == 10 || keynum == 13) {
+				searchCandidate(term.value)
+			}
+		}
+
+		var verifyInput = document.getElementById("verifyInput");
+		verifyInput.onkeypress=function(e){
+			var keynum = window.event ? e.keyCode : e.which;
+			if (keynum == 10 || keynum == 13) {
+				clickVerify();
+			}
+		}
+		let submit = document.getElementById("submit"),
+		pl = document.getElementById("pl");
+
+		submit.onclick = (e) => {
+			if (e.target.innerHTML == 'Listening...') {
+				return false;
+			}
+			let str = document.getElementById("pl").value;
+			str = str.trim();
+			if (str.length == 0) return;
+			e.target.innerHTML = 'Listening...';
+			try {
+				processInput(str);
+			}
+			catch(e) {
+				
+			}
+			
+		}
+
+		loadAnzicInfo();
+		loadGICSInfo();
+
+		// Get the current page scroll position
+		scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+	
+		// if any scroll is attempted, set this to the previous value
+		window.onscroll = function() {
+			window.scrollTo(scrollLeft, scrollTop);
+		};
+	
+		
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        <title>URI Details</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <script src="/js/jquery-2.1.3.min.js"></script>
+        <script src="/js/config.js"></script>
+        <script src="/js/sha1.min.js"></script>
+        <script src="/js/script_popup.js"></script>
+    </head>
+    
+    <body>
+        <div id="section-list" style="margin-top: 10px;">
+                        
+            <div id="accziom">
+                <div id="accziom_result" class="section-frame" style="overflow-y: scroll;" >
+                    <div>
+                        <input type="button" id="pay_button" value="Pay"></input>
+                    </div>
+                    <h1 style="text-align: center"></h1>
+                    <h2>
+
+                    </h2>
+                    <div id="wait_rdf" style="display: none;">
+                        Waiting for response from server...
+                    </div>
+                    <table id="accziom_table" class="table_profile"></table>
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <script>
+		var btn_free = document.getElementById("pay_button");
+		btn_free.onclick = function() {
+			refresh_result();
+		}
+		
+        var body = document.getElementsByTagName("body")[0];
+		body.onresize = function() {
+            
+			var max_height = window.innerHeight;
+            cnt = document.getElementsByClassName("section-frame")[0];
+			cnt.style.height = (max_height-20) + "px";
+			
+			//cnt.style.maxHeight = max_height + "px";
+			
+			//var btn = document.getElementById("collapse_btn");
+			//btn.style.top = (max_height +160)* 0.5 + "px";
+			
+			
+		}
+		body.onresize();
+
+		// Get the current page scroll position
+		scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+        // if any scroll is attempted, set this to the previous value
+		window.onscroll = function() {
+			window.scrollTo(scrollLeft, scrollTop);
+		};
+        
+		
+        function getParameter(param) {
+            param += '=';
+            //alert(window.location);
+            var query = window.location.toString();
+            var iLen = param.length;
+            var iStart = query.indexOf(param);
+            if (iStart == -1) return "";
+            iStart += iLen ;
+            var iEnd = query.indexOf('&', iStart);
+            if (iEnd == -1)
+                return query.substring(iStart);
+            if (iStart == iEnd) return "";
+            return query.substring(iStart, iEnd);
+
+        }
+        pp = getParameter('uri');
+        tt = getParameter('title');
+        global_address = getParameter('address');
+        global_prvKey = getParameter('privatekey');
+        document.getElementsByTagName("h1")[0].innerHTML = decodeURIComponent(tt);
+        document.getElementsByTagName("h2")[0].innerHTML = decodeURIComponent(pp);
+        // ifalert(pp)
+        view_rdf(pp);
+	</script>
+</html>

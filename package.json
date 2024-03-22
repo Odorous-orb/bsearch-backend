@@ -1,0 +1,43 @@
+{
+  "name": "business-search",
+  "version": "1.0.0",
+  "description": "A single-page web app that displays Business Profile Search results.",
+  "main": "app.js",
+  "dependencies": {
+    "@innotrade/enapso-graphdb-client": "^1.8.5",
+    "axios": "^0.26.1",
+    "cors": "^2.8.5",
+    "date-and-time": "^2.2.1",
+    "easy-soap-request": "^4.5.0",
+    "elasticsearch": "^16.7.3",
+    "express": "^4.17.1",
+    "fast-csv": "^2.5.0",
+    "fast-xml-parser": "^4.0.6",
+    "form-data": "^4.0.0",
+    "jshint": "^2.13.1",
+    "koa": "^2.13.4",
+    "koa-route": "^3.2.0",
+    "koa-websocket": "^6.0.0",
+    "mongodb": "^4.1.3",
+    "request-promise-native": "^1.0.9",
+    "soap": "^0.43.0",
+    "util": "^0.12.5",
+    "xml-js": "^1.6.11"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "updateacn": "node manage/update_acn.js",
+    "updateasx": "node manage/update_asx.js",
+    "updatelei": "node manage/update_lei.js",
+    "scrapid": "node manage/scrap_abn_acn.js",
+    "updatetpb": "node manage/update_tpb.js",
+    "updatetl": "node manage/update_tl.js",
+    "dev": "nodemon app.js"
+  },
+  "author": "CuiRenQiang",
+  "devDependencies": {
+    "express-session": "^1.17.3",
+    "nodemon": "^3.1.0",
+    "request": "^2.88.2"
+  }
+}

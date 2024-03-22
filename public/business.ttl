@@ -1,0 +1,562 @@
+@prefix bsa:	<http://www.bsearchau.accziom.com/ns#> .
+@prefix owl:	<http://www.w3.org/2002/07/owl#> .
+@prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: 	<http://www.w3.org/XML/1998/namespace> .
+@prefix xsd:	<http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  	<http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sch:   	<http://schema.org/> .
+@prefix foaf:  	<http://xmlns.com/foaf/0.1/> .
+@prefix sh:    	<http://www.w3.org/ns/shacl#> .
+
+<http://www.bsearchau.accziom.com/ns#> rdf:type owl:Ontology .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://www.bsearchau.accziom.com/#hasACN
+bsa:hasACN rdf:type owl:ObjectProperty ;
+	rdfs:domain bsa:Business ;
+	rdfs:range xsd:integer .
+
+###  http://www.bsearchau.accziom.com/#hasABN
+bsa:hasABN rdf:type owl:ObjectProperty ;
+	rdfs:domain bsa:Business ;
+	rdfs:range xsd:integer .
+
+###  http://www.bsearchau.accziom.com/#hasDirector
+bsa:hasDirector rdf:type owl:ObjectProperty ;
+	rdfs:domain bsa:Business ;
+	rdfs:range bsa:Person .
+
+###  http://www.bsearchau.accziom.com/#hasSecretary
+bsa:hasSecretary rdf:type owl:ObjectProperty ;
+	rdfs:domain bsa:Business ;
+	rdfs:range bsa:Person .
+
+###  http://www.bsearchau.accziom.com/#hasShareholder
+bsa:hasShareholder rdf:type owl:ObjectProperty ;
+	rdfs:domain bsa:Business ;
+	rdfs:range bsa:ShareHolder .
+
+###  http://www.bsearchau.accziom.com/#hasBusiness
+bsa:hasBusiness rdf:type owl:ObjectProperty ;
+	sh:name "Business Name" ;
+	rdfs:domain bsa:Business ;
+	rdfs:range xsd:string .
+
+###  http://www.bsearchau.accziom.com/#hasEmail
+bsa:hasEmail rdf:type owl:ObjectProperty ;
+	sh:name "e-Mail" ;
+	rdfs:domain bsa:Business , bsa:Person ;
+	rdfs:range xsd:string ;
+	sh:group bsa:ContactGroup .
+
+###  http://www.bsearchau.accziom.com/#hasPhone
+bsa:hasPhone rdf:type owl:ObjectProperty ;
+	sh:name "Phone" ;
+	rdfs:domain bsa:Business , bsa:Person ;
+	rdfs:range xsd:string ;
+	sh:group bsa:ContactGroup .
+
+###  http://www.bsearchau.accziom.com/#hasFax
+bsa:hasFax rdf:type owl:ObjectProperty ;
+	sh:name "Phone" ;
+	rdfs:domain bsa:Business , bsa:Person ;
+	rdfs:range xsd:string ;
+	sh:group bsa:ContactGroup .
+
+###  http://www.bsearchau.accziom.com/#hasUrl
+bsa:hasUrl rdf:type owl:ObjectProperty ;
+	sh:name "url" ;
+	rdfs:domain bsa:Business , bsa:Person ;
+	rdfs:range xsd:string ;
+	sh:group bsa:ContactGroup .
+
+###  http://www.bsearchau.accziom.com/#hasRegisteredName
+bsa:hasRegisteredName rdf:type owl:ObjectProperty ;
+	sh:name "Registered name" ;
+	rdfs:domain bsa:Business ;
+	rdfs:range bsa:RegisteredName .
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://www.bsearchau.accziom.com/#addressCountry
+bsa:addressCountry rdf:type owl:DatatypeProperty ;
+	rdfs:range sch:addressCountry .
+
+###  http://www.bsearchau.accziom.com/#addressLocality
+bsa:addressLocality rdf:type owl:DatatypeProperty ;
+	rdfs:range sch:addressLocality .
+
+###  http://www.bsearchau.accziom.com/#addressRegion
+bsa:addressRegion rdf:type owl:DatatypeProperty ;
+	rdfs:range sch:addressRegion .
+
+###  http://www.bsearchau.accziom.com/#postalCode
+bsa:postalCode rdf:type owl:DatatypeProperty ;
+	rdfs:range sch:postalCode .
+
+###  http://www.bsearchau.accziom.com/#longitude
+bsa:longitude rdf:type owl:DatatypeProperty ;
+	rdfs:range sch:longitude .
+
+###  http://www.bsearchau.accziom.com/#latitude
+bsa:latitude rdf:type owl:DatatypeProperty ;
+	rdfs:range sch:latitude .
+
+###  http://www.bsearchau.accziom.com/#addressStreet
+bsa:addressStreet rdf:type owl:DatatypeProperty ;
+	rdfs:range sch:streetAddress .
+
+###  http://www.bsearchau.accziom.com/#givenName
+bsa:givenName rdf:type owl:DatatypeProperty ;
+	rdfs:domain bsa:Person ;
+	rdfs:range sch:givenName .
+
+###  http://www.bsearchau.accziom.com/#familyName
+bsa:familyName rdf:type owl:DatatypeProperty ;
+	rdfs:domain bsa:Person ;
+	rdfs:range sch:familyName .
+
+###  http://www.bsearchau.accziom.com/#middleName
+bsa:middleName rdf:type owl:DatatypeProperty ;
+	rdfs:domain bsa:Person ;
+	rdfs:range xsd:string .
+
+###  http://www.bsearchau.accziom.com/#gender
+bsa:gender rdf:type owl:DatatypeProperty ;
+	rdfs:range sch:gender .
+
+###  http://www.bsearchau.accziom.com/#locateAt
+bsa:locateAt rdf:type owl:DatatypeProperty ;
+	rdfs:range bsa:Position .
+
+###  http://www.bsearchau.accziom.com/#entityName
+bsa:entityName rdf:type owl:DatatypeProperty ;
+	rdfs:range xsd:string .
+
+###  http://www.bsearchau.accziom.com/#activeStatus
+bsa:activeStatus rdf:type owl:DatatypeProperty ;
+	rdfs:range xsd:string .
+
+###  http://www.bsearchau.accziom.com/#businessType
+bsa:businessType rdf:type owl:DatatypeProperty ;
+	rdfs:range xsd:string ;
+	sh:in ( "Trust" "Sole Trader" "Partnership" "Company" ) .
+
+###  http://www.bsearchau.accziom.com/#businessSubtype
+bsa:businessSubtype rdf:type owl:DatatypeProperty ;
+	rdfs:range xsd:string .
+
+###  http://www.bsearchau.accziom.com/#gstEffectiveDate
+bsa:gstEffectiveDate rdf:type owl:DatatypeProperty ;
+	rdfs:range xsd:date .
+
+###  http://www.bsearchau.accziom.com/#totalSharesInCapitalGroup
+bsa:totalSharesInCapitalGroup rdf:type owl:DatatypeProperty ;
+	rdfs:range xsd:integer .
+
+###  http://www.bsearchau.accziom.com/#isJointShareholder
+bsa:isJointShareholder rdf:type owl:DatatypeProperty ;
+	rdfs:range xsd:string ;
+	sh:in ( "Yes" "No" ) .
+
+###  http://www.bsearchau.accziom.com/#overallOwnershipPercentage
+bsa:overallOwnershipPercentage rdf:type owl:DatatypeProperty ;
+	rdfs:range xsd:float .
+
+###  http://www.bsearchau.accziom.com/#shareAllocation
+bsa:shareAllocation rdf:type owl:DatatypeProperty ;
+	rdfs:range xsd:integer .
+
+###  http://www.bsearchau.accziom.com/#shareClassTitle
+bsa:shareClassTitle rdf:type owl:DatatypeProperty ;
+	rdfs:range xsd:string .
+
+###  http://www.bsearchau.accziom.com/#overallShareTotal
+bsa:overallShareTotal rdf:type owl:DatatypeProperty ;
+	rdfs:range xsd:integer .
+
+###  http://www.bsearchau.accziom.com/#ownershipPercentage
+bsa:ownershipPercentage rdf:type owl:DatatypeProperty ;
+	rdfs:range xsd:float .
+
+###  http://www.bsearchau.accziom.com/#allocationNumber
+bsa:allocationNumber rdf:type owl:DatatypeProperty ;
+	rdfs:range xsd:integer .
+
+###  http://www.bsearchau.accziom.com/#beneficiallyHeld
+bsa:beneficiallyHeld rdf:type owl:DatatypeProperty ;
+	rdfs:range xsd:string ;
+	sh:in ( "Yes" "No" ) .
+
+###  http://www.bsearchau.accziom.com/#legalName
+bsa:legalName rdf:type owl:DatatypeProperty ;
+	rdfs:range xsd:string .
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://www.bsearchau.accziom.com/#Person
+bsa:Person rdf:type owl:Class .
+
+###  http://www.bsearchau.accziom.com/#Position
+bsa:Position rdf:type owl:Class .
+
+###  http://www.bsearchau.accziom.com/#Address
+bsa:Address rdf:type owl:Class ;
+	rdfs:subClassOf bsa:Position .
+
+###  http://www.bsearchau.accziom.com/#Country
+bsa:Country rdf:type owl:Class ;
+	rdfs:subClassOf bsa:Position .
+
+###  http://www.bsearchau.accziom.com/#StreetAddress
+bsa:StreetAddress rdf:type owl:Class ;
+	rdfs:subClassOf bsa:Position .
+
+###  http://www.bsearchau.accziom.com/#Organization
+bsa:Organization rdf:type owl:Class .
+
+###  http://www.bsearchau.accziom.com/#Business
+bsa:Business rdf:type owl:Class ;
+	rdfs:subClassOf bsa:Organization .
+
+###  http://www.bsearchau.accziom.com/#ShareHolder
+bsa:ShareHolder rdf:type owl:Class .
+
+###  http://www.bsearchau.accziom.com/#RegisteredName
+bsa:RegisteredName rdf:type owl:Class .
+
+#################################################################
+#    Shapes
+#################################################################
+
+###  http://www.bsearchau.accziom.com/#PersonShape
+bsa:PersonShape
+	a sh:NodeShape ;
+	sh:targetClass bsa:Person ;
+	sh:property [
+		sh:path bsa:givenName ;
+		sh:nodeKind sh:Literal ;
+		sh:description "The first name of a person." ;
+		sh:name "Given name" ;
+		sh:group bsa:NameGroup ;
+		sh:order 1 ;
+		sh:maxLength 20 ;
+		sh:minCount 1 ;
+		sh:maxCount 1 ;
+	] ;
+	sh:property [
+		sh:path bsa:middleName ;
+		sh:nodeKind sh:Literal ;
+		sh:description "The middle name of a person." ;
+		sh:name "Middle name" ;
+		sh:group bsa:NameGroup ;
+		sh:order 2 ;
+		sh:maxLength 20 ;
+		sh:maxCount 1 ;
+	] ;
+	sh:property [
+		sh:path bsa:familyName ;
+		sh:nodeKind sh:Literal ;
+		sh:description "The last name of a person." ;
+		sh:name "Family name" ;
+		sh:group bsa:NameGroup ;
+		sh:order 3 ;
+		sh:maxLength 20 ;
+		sh:minCount 1 ;
+		sh:maxCount 1 ;
+	] ;
+	sh:property [
+		sh:path bsa:birthDate ;
+		sh:nodeKind sh:Literal ;
+		sh:datatype xsd:date ;
+		sh:maxCount 1 ;
+	] ;
+	sh:property [
+		sh:path sch:gender ;
+		sh:nodeKind sh:Literal ;
+		sh:name "Gender" ;
+		sh:in ( "Male" "Female" ) ;
+		sh:maxCount 1 ;
+	] ;
+	sh:property [
+		sh:path bsa:locateAt ;
+		sh:nodeKind sh:IRI ;
+		sh:or (
+			[
+				sh:class bsa:Address ;
+			]
+			[
+				sh:class bsa:StreetAddress ;
+			]
+		) ;
+		sh:minCount 1 ;
+		sh:group bsa:ContactGroup ;
+	] ;
+	.
+
+bsa:NameGroup
+	a sh:PropertyGroup ;
+	rdfs:label "Name" .
+
+bsa:ContactGroup
+	a sh:PropertyGroup ;
+	rdfs:label "Contact Info" .
+
+###  http://www.bsearchau.accziom.com/#AddressShape
+bsa:AddressShape
+	a sh:NodeShape ;
+	sh:targetClass bsa:Address ;
+	sh:property [
+		sh:path bsa:postalCode ;
+		sh:nodeKind sh:Literal ;
+		sh:name "Postcode" ;
+		sh:datatype xsd:integer ;
+		sh:minCount 1;
+		sh:maxCount 1;
+	] ;
+	sh:property [
+		sh:path bsa:addressCountry ;
+		sh:nodeKind sh:Literal ;
+		sh:name "Country" ;
+		sh:pattern "[A-Z][A-Z]" ;
+		sh:minCount 1;
+		sh:maxCount 1;
+	] ;
+	sh:property [
+		sh:path bsa:addressLocality ;
+		sh:nodeKind sh:Literal ;
+		sh:name "Locality" ;
+		sh:minCount 1;
+		sh:maxCount 1;
+	] ;
+	sh:property [
+		sh:path bsa:addressRegion ;
+		sh:nodeKind sh:Literal ;
+		sh:name "Region" ;
+		sh:minCount 1;
+		sh:maxCount 1;
+	] ;
+	sh:property [
+		sh:path bsa:longitude ;
+		sh:nodeKind sh:Literal ;
+		sh:datatype xsd:float ;
+		sh:name "Longitude" ;
+		sh:minCount 1;
+		sh:maxCount 1;
+		sh:group bsa:GeoPosition ;
+	] ;
+	sh:property [
+		sh:path bsa:latitude ;
+		sh:nodeKind sh:Literal ;
+		sh:datatype xsd:float ;
+		sh:name "Latitude" ;
+		sh:minCount 1;
+		sh:maxCount 1;
+		sh:group bsa:GeoPosition ;
+	] ;
+	.
+
+bsa:GeoPosition
+	a sh:PropertyGroup ;
+	rdfs:label "GeoPosition" .
+
+###  http://www.bsearchau.accziom.com/#StreetAddressShape
+bsa:StreetAddressShape
+	a sh:NodeShape ;
+	sh:targetClass bsa:StreetAddress ;
+	sh:name "Street Address" ;
+	sh:property [
+		sh:path bsa:addressStreet ;
+		sh:nodeKind sh:Literal ;
+		sh:name "Street" ;
+		sh:datatype xsd:string ;
+		sh:minCount 1 ;
+		sh:maxCount 1 ;
+	] ;
+	.
+
+###  http://www.bsearchau.accziom.com/#BusinessShape
+bsa:BusinessShape
+	a sh:NodeShape ;
+	sh:targetClass bsa:Business ;
+	sh:name "Business" ;
+	sh:property [
+		sh:path bsa:hasACN ;
+		sh:nodeKind sh:Literal ;
+		sh:name "ACN" ;
+		sh:datatype xsd:integer ;
+		sh:pattern "[0-9]{9,9}" ;
+		sh:maxCount 1 ;
+	] ;
+	sh:property [
+		sh:path bsa:hasABN ;
+		sh:nodeKind sh:Literal ;
+		sh:name "ABN" ;
+		sh:datatype xsd:integer ;
+		sh:pattern "[0-9]{11,11}" ;
+		sh:maxCount 1 ;
+	] ;
+	sh:property [
+		sh:path bsa:activeStatus ;
+		sh:nodeKind sh:Literal ;
+		sh:name "Business Status" ;
+		sh:minCount 1 ;
+		sh:maxCount 1 ;
+		sh:in ( "Active" "Inactive" ) ;
+	] ;
+	sh:property [
+		sh:path bsa:legalName ;
+		sh:nodeKind sh:Literal ;
+		sh:name "Legal Name" ;
+		sh:minCount 1 ;
+		sh:maxCount 1 ;
+	] ;
+	sh:property [
+		sh:path bsa:businessType ;
+		sh:nodeKind sh:Literal ;
+		sh:name "Business Type" ;
+		sh:minCount 1 ;
+		sh:maxCount 1 ;
+	] ;
+	sh:property [
+		sh:path bsa:businessSubtype ;
+		sh:nodeKind sh:Literal ;
+		sh:name "Business Subtype" ;
+		sh:minCount 1 ;
+		sh:maxCount 1 ;
+	] ;
+	sh:property [
+		sh:path bsa:gstEffectiveDate ;
+		sh:nodeKind sh:Literal ;
+		sh:name "gstEffectiveDate" ;
+		sh:datatype xsd:date ;
+		sh:minCount 1 ;
+		sh:maxCount 1 ;
+	] ;
+	sh:property [
+		sh:path bsa:locateAt ;
+		sh:nodeKind sh:IRI ;
+		sh:or (
+			[
+				sh:class bsa:Address ;
+			]
+			[
+				sh:class bsa:StreetAddress ;
+			]
+		) ;
+		sh:minCount 1 ;
+		sh:group bsa:ContactGroup ;
+	] ;
+	sh:property [
+		sh:path bsa:registrationDate ;
+		sh:nodeKind sh:Literal ;
+		sh:name "registrationDate" ;
+		sh:datatype xsd:date ;
+	];
+	.
+
+bsa:RegisteredNameShape
+	a sh:NodeShape ;
+	sh:targetClass bsa:RegisteredName ;
+	sh:name "Registered name" ;
+	sh:property [
+		sh:path bsa:legalName ;
+		sh:nodeKind sh:Literal ;
+		sh:name "Entity Name" ;
+		sh:datatype xsd:string ;
+		sh:maxCount 1 ;
+		sh:minCount 1 ;
+	] ;
+	sh:property [
+		sh:path sch:startDate ;
+		sh:nodeKind sh:Literal ;
+		sh:name "Start Date" ;
+		sh:datatype xsd:date ;
+		sh:minCount 1 ;
+		sh:maxCount 1 ;
+	] ;
+	sh:property [
+		sh:path sch:endDate ;
+		sh:nodeKind sh:Literal ;
+		sh:name "End Date" ;
+		sh:datatype xsd:date ;
+		sh:maxCount 1 ;
+	] ;
+	.
+
+bsa:ShareHolderShape
+	a sh:NodeShape ;
+	sh:targetClass bsa:ShareHolder ;
+	sh:property [
+		sh:path bsa:entity ;
+		sh:nodeKind sh:IRI ;
+		sh:class bsa:Person ;
+		sh:minCount 1 ;
+		sh:maxCount 1 ;
+	];
+	sh:property [
+		sh:path bsa:totalSharesInCapitalGroup ;
+		sh:nodeKind sh:Literal ;
+		sh:datatype xsd:integer ;
+		sh:minCount 1 ;
+		sh:maxCount 1 ;
+	];
+	sh:property [
+		sh:path bsa:isJointShareholder ;
+		sh:nodeKind sh:Literal ;
+		sh:datatype xsd:string ;
+		sh:in ( "Yes" "No" ) ;
+		sh:minCount 1 ;
+		sh:maxCount 1 ;
+	];
+	sh:property [
+		sh:path bsa:overallOwnershipPercentage ;
+		sh:nodeKind sh:Literal ;
+		sh:datatype xsd:float ;
+		sh:minCount 1 ;
+		sh:maxCount 1 ;
+	];
+	sh:property [
+		sh:path bsa:shareAllocation ;
+		sh:nodeKind sh:Literal ;
+		sh:datatype xsd:integer ;
+		sh:minCount 1 ;
+		sh:maxCount 1 ;
+	];
+	sh:property [
+		sh:path bsa:shareClassTitle ;
+		sh:nodeKind sh:Literal ;
+		sh:datatype xsd:string ;
+		sh:minCount 1 ;
+		sh:maxCount 1 ;
+	];
+	sh:property [
+		sh:path bsa:overallShareTotal ;
+		sh:nodeKind sh:Literal ;
+		sh:datatype xsd:integer ;
+		sh:minCount 1 ;
+		sh:maxCount 1 ;
+	];
+	sh:property [
+		sh:path bsa:ownershipPercentage ;
+		sh:nodeKind sh:Literal ;
+		sh:datatype xsd:float ;
+		sh:minCount 1 ;
+		sh:maxCount 1 ;
+	];
+	sh:property [
+		sh:path bsa:beneficiallyHeld ;
+		sh:nodeKind sh:Literal ;
+		sh:datatype xsd:string ;
+		sh:in ( "Yes" "No" ) ;
+		sh:minCount 1 ;
+		sh:maxCount 1 ;
+	];
+	.
