@@ -63,6 +63,8 @@ async function sparql_ask(query_str, call_back, graph = default_graph) {
 var ont_length = 0;
 var ont_id = 0;
 
+const BayesNet = require('bayesian-network');
+
 init_ontology_history();
 
 function init_ontology_history() {
@@ -265,7 +267,6 @@ async function sync_sparql_delete(del_query, context = '', graph = default_graph
     if (res.success == true) {
       return res;
     }
-    console.log(`query failed. query = ${new_query}`);
 
     //console.log(new_query);
     await new Promise(resolve => setTimeout(resolve, 500));
@@ -284,7 +285,6 @@ async function sync_sparql_update(query, graph = default_graph) {
     if (res.success == true) {
       return res;
     }
-    console.log(`query failed. query = ${new_query}`);
 
     await new Promise(resolve => setTimeout(resolve, 1500));
   }
@@ -519,6 +519,7 @@ async function search_by_abn(abn, free = true, graph = default_graph) {
     ?s rdf:type azc:Business .
   `;
   var res = await sync_sparql_query(sql, graph);
+  console.log("res :: " + JSON.stringify(res));
   if (res.length > 0) {
     var entity = res[0].s.value;
     var res = await get_2nd_property(entity, free);
@@ -734,6 +735,36 @@ function isVoteProperty(uri) {
   return false;
 }
 
+var network = new BayesNet();
+
+function createBayesianNetwork(variables, dependencies) {
+  
+  const nodes = {}; // To store references to nodes
+
+    // Create nodes (variables) in the Bayesian network
+    // variables.forEach(variable => {
+    //     const nodeO1 = new bayes.Node('o1', []);  
+    //     nodes[variable] = g.addNode(variable, variable);
+    // });
+
+    // Define CPTs for each node based on dependencies
+    dependencies.forEach(dependency => {
+        const { from, to, predicate } = dependency;
+        const parentNode = new bayes.Node(from, []);
+        const childNode = new bayes.Node(to, [from]);
+        network.addNode(parentNode);
+        network.addNode(childNode);
+        childNode.setCpt([
+          [0.4,0.6],
+          [0.5,0.5],
+          [0.2,0.8]
+        ]);
+    });
+
+    // Return an array of nodes
+    return Object.values(nodes);
+}
+
 async function get_2nd_property(uri, free, graph = default_graph) {
   var free_condition = '';
   //  if (free) {
@@ -756,7 +787,34 @@ async function get_2nd_property(uri, free, graph = default_graph) {
 
   //console.log(sql);
   var res = await sync_sparql_query(sql, graph);
-  console.log(JSON.stringify(res));
+  console.log("f_res :: " + JSON.stringify(res));
+  const variables = new Set();
+  const dependencies = [];
+
+  // Process each RDF triple
+  // res.forEach(entry => {
+  //   const subject = entry.p.value;
+  //   const object = entry.p1.value;
+  //   const predicate = entry.o1.value;
+
+  //   // Add subject and object as variables
+  //   network.addNode(subject);
+  //   network.addNode(object);
+  //   // variables.add(subject);
+  //   // variables.add(object);
+  //   network.addEdge(subject, object);
+  //   const cpt = {};
+  //   // Example: Define probabilities for 'true' state of 'o' given 'true' state of 'o1'
+  //   cpt[subject] = { true: { true: 0.7, false: 0.3 } }; // You need to specify the actual probabilities
+  //   network.setCpt(object, cpt);
+  //   // Add dependency between subject and object based on predicate
+  //   // dependencies.push({ from: subject, to: object, predicate });
+  // });
+
+  // // const bayesianNetwork = createBayesianNetwork(variables, dependencies);
+  // const evidence = { o1: true }; // Example evidence
+  // const probability = network.calculateProbability('o', evidence);
+  // console.log('Probability of o being true:', probability);
   var result = { "uri": uri };
 
   var blank_dict = {};
@@ -772,7 +830,7 @@ async function get_2nd_property(uri, free, graph = default_graph) {
     var type = ri.o.type;
     var bn = ri.o1.value; // blank node
     var pub_kind = ri.pub ? ri.pub.value : 'Y';
-
+    
     if (pub_kind == 'D') continue;
     if (pub_kind == 'N') {
       if (free) {
@@ -889,9 +947,10 @@ async function get_2nd_property(uri, free, graph = default_graph) {
     }
 
   }
-
+  console.log("result :: " + JSON.stringify(result));
+  // var temp = {};
+  // temp = result;
   result['##order##'] = ord_dict;
-
   Object.keys(result).forEach(key => {
     var subdict = result[key];
     Object.keys(subdict).forEach(k => {
@@ -912,8 +971,56 @@ async function get_2nd_property(uri, free, graph = default_graph) {
         }
       }
     })
-  })
+  });
+
+  Object.keys(result).forEach(key => {
+    var subdict = result[key];
+    Object.keys(subdict).forEach(k => {
+      var value = subdict[k];
+      if (Array.isArray(value)) {
+        var vi_first = value.length > 0 ? value[0] : {};
+        for (var i = 0; i < value.length; i++) {
+          var vi = value[i];
+          if(vi_first.value != undefined && vi_first.value.label == undefined) {
+            var count = 1;
+            for (var j = 0; j < value.length; j++) {
+              var sub_vi = value[j];
+              if(i != j 
+                  && vi.value != undefined 
+                  && sub_vi.value != undefined 
+                  && vi.value == sub_vi.value) {
+                count ++;
+              }
+            }
+            result[key][k][i]['__count'] = count;
+          }
+          if(vi_first.value != undefined && vi_first.value.label != undefined) {
+            var count = 1;
+            for (var j = 0; j < value.length; j++) {
+              var sub_vi = value[j];
+              if(i != j 
+                  && vi.value != undefined 
+                  && sub_vi.value != undefined 
+                  && vi.value.label != undefined 
+                  && sub_vi.value.label != undefined 
+                  && vi.value.label == sub_vi.value.label) {
+                count ++;
+              }
+            }
+            result[key][k][i]['__count'] = count;
+          }
+        }
+      }
+      else if (value.constructor == Object) {
+        if(value.value != undefined) {
+          result[key][k]['__count'] = 1;
+        }
+      }
+    })
+  });
+  
   result.record_list = Object.keys(pay_record_list);
+
   return result;
 }
 

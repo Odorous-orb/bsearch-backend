@@ -88,7 +88,7 @@ async function ask(query_str, call_back) {
 
     if (json_result.boolean === true) {
         //console.log(json_result);
-        call_back({ "result": json_result, "success": true });
+        call_back({ "result": json_result, "     ": true });
     }
     else {
         call_back({ "success": false });
