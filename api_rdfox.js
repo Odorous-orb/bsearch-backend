@@ -41,13 +41,11 @@ async function request_update(sparql_text) {
                 Accept: 'application/sparql-results+json',
             },
         })
-        console.log(response.data)
         if (response.data === "") {
             return true;
         }
         return false;
     } catch (e) {
-        console.log(e.message);
         return false;
     }
 }

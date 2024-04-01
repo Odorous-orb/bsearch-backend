@@ -791,30 +791,6 @@ async function get_2nd_property(uri, free, graph = default_graph) {
   const variables = new Set();
   const dependencies = [];
 
-  // Process each RDF triple
-  // res.forEach(entry => {
-  //   const subject = entry.p.value;
-  //   const object = entry.p1.value;
-  //   const predicate = entry.o1.value;
-
-  //   // Add subject and object as variables
-  //   network.addNode(subject);
-  //   network.addNode(object);
-  //   // variables.add(subject);
-  //   // variables.add(object);
-  //   network.addEdge(subject, object);
-  //   const cpt = {};
-  //   // Example: Define probabilities for 'true' state of 'o' given 'true' state of 'o1'
-  //   cpt[subject] = { true: { true: 0.7, false: 0.3 } }; // You need to specify the actual probabilities
-  //   network.setCpt(object, cpt);
-  //   // Add dependency between subject and object based on predicate
-  //   // dependencies.push({ from: subject, to: object, predicate });
-  // });
-
-  // // const bayesianNetwork = createBayesianNetwork(variables, dependencies);
-  // const evidence = { o1: true }; // Example evidence
-  // const probability = network.calculateProbability('o', evidence);
-  // console.log('Probability of o being true:', probability);
   var result = { "uri": uri };
 
   var blank_dict = {};
@@ -947,9 +923,6 @@ async function get_2nd_property(uri, free, graph = default_graph) {
     }
 
   }
-  console.log("result :: " + JSON.stringify(result));
-  // var temp = {};
-  // temp = result;
   result['##order##'] = ord_dict;
   Object.keys(result).forEach(key => {
     var subdict = result[key];
@@ -992,7 +965,7 @@ async function get_2nd_property(uri, free, graph = default_graph) {
                 count ++;
               }
             }
-            result[key][k][i]['__count'] = count;
+            result[key][k][i]['__count'] = count.toString();
           }
           if(vi_first.value != undefined && vi_first.value.label != undefined) {
             var count = 1;
@@ -1007,7 +980,7 @@ async function get_2nd_property(uri, free, graph = default_graph) {
                 count ++;
               }
             }
-            result[key][k][i]['__count'] = count;
+            result[key][k][i]['__count'] = count.toString();
           }
         }
       }
@@ -1555,7 +1528,6 @@ async function get_probable_properties(entity, graph = default_graph) {
       filter strstarts(str(?p), str(azp:))
     }
   `
-  console.log(query);
   var result1 = await sync_sparql_cmd(query);
 
   var query_inv = `

@@ -75,11 +75,11 @@ async function get_tpb_info(name) {
 
 async function tpb_all_list(start=0, count=20) {
     var c_list = await new Promise(resolve=>{
-        tpb_collection.find({}).sort({'PRACTICE_NAME':1}).skip(start).limit(count).toArray().then(ans=>{
+        tpb_collection.find({}).sort({'REG_NAME':1}).skip(start).limit(count).toArray().then(ans=>{
             resolve(ans);
         });
     });
-    var name_list = c_list.map(v=>v.PRACTICE_NAME);
+    var name_list = c_list.map( v=> { return v.REG_NAME });
     return name_list;
 }
 
@@ -92,7 +92,7 @@ async function search_tpb(params) {
     let name = params.query;
     let res = await mongo_search_by_name(tpb_collection, name, ['PRACTICE_NAME', 'REG_NAME', 'COMPANY']);
     let result = res.map(item => {
-        var comp_name = item.PRACTICE_NAME;
+        var comp_name = item.REG_NAME;
         var sim1 = calc_jaccard_sim(comp_name, name);
         var reg_name = item.REG_NAME
         if (reg_name) {

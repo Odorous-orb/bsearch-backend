@@ -518,7 +518,6 @@ api_app.post('/tpb_query', async function(req, res) {
         res.json({});
         return;
     }
-    console.log(`tpb query=${query}`);
     let info = await get_tpb_info(query);
     if (info) {
         res.json(info);
@@ -982,7 +981,7 @@ api_app.post('/updatedb', function(req, res) {
     if (rb.hasOwnProperty('cmd')) {
         manage_db(rb, res);
     } else {
-        manage_db(rq, res, false);
+        manage_db(rq, res);
     }
 });
 
@@ -1371,8 +1370,6 @@ api_app.post('/nftinfo', async function(req, res) {
 
 function get_parameter(req, param) {
     var body = undefined;
-    console.log(`req.body=${req.body}`)
-    console.log(`req.query=${req.query}`)
     if (req.body && req.body[param]) {
         body = req.body;
     }
